@@ -23,6 +23,11 @@ fn main() {
         ])
         .setup(|app| {
             let window = app.get_window("multi_tools").unwrap();
+            #[cfg(target_os = "windows")]
+            if let Err(e) = set_shadow(&window, true) {
+                println!("{}", e.to_string());
+            }
+            #[cfg(target_os = "macos")]
             if let Err(e) = set_shadow(&window, true) {
                 println!("{}", e.to_string());
             }
