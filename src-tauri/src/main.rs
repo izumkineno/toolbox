@@ -23,7 +23,9 @@ fn main() {
         ])
         .setup(|app| {
             let window = app.get_window("multi_tools").unwrap();
-            set_shadow(&window, true).expect("Unsupported platform!");
+            if let Err(e) = set_shadow(&window, true) {
+                println!("{}", e.to_string());
+            }
             Ok(())
         })
         .run(tauri::generate_context!())
