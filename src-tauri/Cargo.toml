@@ -1,0 +1,38 @@
+[package]
+name = "multi_tools"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5.1", features = [] }
+
+[dependencies]
+tauri = { version = "1.5.3", features = [ "window-unmaximize", "window-start-dragging", "window-hide", "window-minimize", "window-maximize", "window-close", "window-unminimize", "window-show", "shell-open"] }
+multi_tools_serialport = { path = "../core/serialport" }
+window-shadows = "0.2.2"
+serde = { version = "1.0.196", features = ["derive"] }
+serde_json = "1.0.113"
+anyhow = "1.0.79"
+tokio = "1.36.0"
+encoding_rs = "0.8.33"
+chrono = "0.4.34"
+
+
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+panic = "abort" # Strip expensive panic clean-up logic
+codegen-units = 1 # Compile crates one after another so the compiler can optimize better
+lto = true # Enables link to optimizations
+opt-level = "s" # Optimize for binary size
+strip = true # Remove debug symbols

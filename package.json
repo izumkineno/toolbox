@@ -1,0 +1,28 @@
+{
+  "name": "mt-frame",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "tauri dev": "tauri dev",
+    "tauri build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.2",
+    "element-plus": "^2.5.5",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.19"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^0.4.2",
+    "@rsbuild/plugin-vue": "^0.4.2",
+    "@tauri-apps/cli": "^1.5.8",
+    "typescript": "^5.3.0",
+    "unplugin-auto-import": "^0.17.5",
+    "unplugin-vue-components": "^0.26.0",
+    "vue-tsc": "^1.8.5"
+  }
+}

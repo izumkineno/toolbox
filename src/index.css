@@ -1,0 +1,25 @@
+
+:root {
+  --top-bar-height: 30px;
+  --body-height: calc(100% - var(--top-bar-height));
+  --gap-size: 0.2rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body{
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+label, select {
+  user-select: none;
+}
+
+.notification {
+  transform: scale(0.8) translateX(3rem);
+}
