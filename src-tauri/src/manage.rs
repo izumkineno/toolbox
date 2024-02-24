@@ -54,6 +54,7 @@ pub struct MsgHandle {
     recv_show_time: bool,
     recv_hex: bool,
     recv_code: MsgCode,
+    recv_len: Option<u32>,
     pub(crate) recv_count: u32,
     pub(crate) send_count: u32,
 }
@@ -65,9 +66,14 @@ impl MsgHandle {
             recv_show_time: false,
             recv_hex: false,
             recv_code: MsgCode::UTF8,
+            recv_len: None,
             recv_count: 0,
             send_count: 0,
         }
+    }
+
+    pub fn set_recv_len(&mut self, len: Option<u32>) {
+        self.recv_len = len;
     }
 
     pub fn set_display_show_time(&mut self, is_show: bool) {
@@ -107,9 +113,20 @@ impl MsgHandle {
     }
 
     pub fn recv_buffer_to_string(&self) -> String {
+        let len = self.recv_len;
+        let e = self.recv_buffer.len().clone();
+        let s = if len.is_none() {
+            0
+        } else {
+            let len = len.unwrap() as usize;
+            if e < len { 0 } else { e - len }
+        };
+
+        let buffer = &self.recv_buffer[s..e];
+
         let show_time = self.recv_show_time;
         let hex = self.recv_hex;
-        let buffer = self.recv_buffer.iter().map(|v| {
+        let buffer = buffer.iter().map(|v| {
             match [show_time, hex] {
                 [true, true] => {
                     format!("<strong>[{}]</strong>",v.time.clone()) + ": " + &v.buffer.iter().map(|v| format!("{:02X}", v)).collect::<Vec<String>>().join(" ") + "\r\n"

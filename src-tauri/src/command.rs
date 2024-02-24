@@ -213,7 +213,7 @@ pub async fn get_serial_ports() -> Result<Vec<SerialInfo>, String> {
 
 
 // 控制命令
-pub async fn _set_recv_setting(app_handle: tauri::AppHandle, id: String, item: u32, value: u32) -> Result<()> {
+pub async fn _set_recv_setting(app_handle: tauri::AppHandle, id: String, item: u32, value: i64) -> Result<()> {
 
     {
         let msg_handles = app_handle.state::<MsgHandles>();
@@ -251,6 +251,13 @@ pub async fn _set_recv_setting(app_handle: tauri::AppHandle, id: String, item: u
                     _ => msg_handle.set_display_code(MsgCode::UTF8)
                 }
             }
+            104 => {
+                match value {
+                    x if x < 0 => msg_handle.set_recv_len(None),
+                    x if x >= 0 => msg_handle.set_recv_len(Some(x as usize as u32)),
+                    _ => msg_handle.set_recv_len(None)
+                }
+            }
             _ => {}
         }
     }
@@ -260,6 +267,6 @@ pub async fn _set_recv_setting(app_handle: tauri::AppHandle, id: String, item: u
     Ok(())
 }
 #[tauri::command]
-pub async fn set_recv_setting(app_handle: tauri::AppHandle, id: String, item: u32, value: u32) -> Result<(), String> {
+pub async fn set_recv_setting(app_handle: tauri::AppHandle, id: String, item: u32, value: i64) -> Result<(), String> {
     catch_error_to_string!(_set_recv_setting, app_handle, id, item, value)
 }

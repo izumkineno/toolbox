@@ -2,11 +2,10 @@
 <script setup lang="ts">
   import {invoke_toast} from "../util";
   import {base_control} from "../store/base_control";
-  import {computed, onBeforeUnmount, reactive, ref, watch} from "vue";
+  import {onBeforeUnmount, reactive, ref, watch} from "vue";
   import {listen} from "@tauri-apps/api/event";
   import {Delete} from "@element-plus/icons-vue";
   import {appWindow} from "@tauri-apps/api/window";
-  import {ElNotification} from "element-plus";
 
   const count = reactive({
     send: 0,
@@ -20,6 +19,20 @@
     {
       label: "GBK",
       value: 1
+    }
+  ]
+  const recv_length = [
+    {
+      label: "无限制",
+      value: "-1"
+    },
+    {
+      label: "不显示",
+      value: "0"
+    },
+    {
+      label: "10",
+      value: "10"
     }
   ]
 
@@ -66,6 +79,8 @@
     show_time: false,
     // 编码,
     char_code: 0,
+    // 显示消息的最大长度
+    recv_len: "-1",
     // 接收监听句柄
     listen_handle: () => {},
   })
@@ -130,6 +145,9 @@
   const set_char_code = () => {
     set_recv(103, info_connect.char_code)
   }
+  const set_recv_len = () => {
+    set_recv(104, parseInt(info_connect.recv_len))
+  }
   const clear_recv_count = () => {
     count.recv = 0
     set_recv(0, 1)
@@ -151,7 +169,7 @@
   onBeforeUnmount(() => {
     clear_link()
   })
-  window.addEventListener('beforeunload', function (e) {
+  window.addEventListener('beforeunload', () => {
     clear_link()
   });
 
@@ -298,6 +316,9 @@
         <el-checkbox label="时间" @click="set_time" />
         <el-select v-model="info_connect.char_code" style="width: 6rem" @change="set_char_code">
           <el-option v-for="item of char_codes" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        <el-select v-model="info_connect.recv_len" style="width: 6rem" @change="set_recv_len" filterable allow-create>
+          <el-option v-for="item of recv_length" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
         <el-button @click="clear_buffer" size="small" :icon="Delete" circle />
       </el-space>
